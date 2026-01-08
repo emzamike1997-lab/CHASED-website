@@ -1,0 +1,656 @@
+/* ===================================
+   CHASED E-Commerce - Design System
+   Color Psychology Implementation
+   =================================== */
+
+/* ===================================
+   1. CSS VARIABLES - COLOR PALETTE
+   =================================== */
+:root {
+    /* Primary Colors - Color Psychology */
+    --color-bg-main: #000000;
+    /* Pure Black - Luxury, Premium, Elegance */
+    --color-sidebar: #000000;
+    /* Pure Black - Luxury, Premium, Elegance */
+    --color-text-body: #FFFFFF;
+    /* White - Clarity, Purity, Simplicity */
+    --color-cta: #AAFF2F;
+    /* Parakeet Green - Energy, Action, Freshness */
+
+    /* Supporting Colors */
+    --color-overlay: rgba(0, 0, 0, 0.5);
+    --color-card-bg: rgba(255, 255, 255, 0.05);
+    --color-card-hover: rgba(255, 255, 255, 0.1);
+    --color-border: rgba(255, 255, 255, 0.15);
+
+    /* Typography */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-xxl: 4rem;
+
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* ===================================
+   2. RESET & BASE STYLES
+   =================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--color-bg-main);
+    background-image: url('../assets/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: var(--color-text-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ===================================
+   3. TYPOGRAPHY HIERARCHY
+   =================================== */
+h1 {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-cta);
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+}
+
+h2 {
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-normal);
+    color: var(--color-text-body);
+    line-height: 1.4;
+}
+
+h3 {
+    font-size: 1rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-body);
+}
+
+p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text-body);
+}
+
+/* ===================================
+   4. LAYOUT STRUCTURE
+   =================================== */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===================================
+   5. SIDEBAR - LEFT NAVIGATION
+   =================================== */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 240px;
+    height: 100vh;
+    background-color: var(--color-sidebar);
+    padding: var(--spacing-lg) var(--spacing-md);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-lg);
+}
+
+.sidebar-header {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-cta);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.brand-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--color-cta), #7FD91F);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-sidebar);
+    box-shadow: 0 4px 12px rgba(170, 255, 47, 0.3);
+}
+
+.brand-name {
+    font-size: 1.75rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-body);
+    letter-spacing: 2px;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    text-decoration: none;
+    color: var(--color-text-body);
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--color-cta);
+    transform: scaleY(0);
+    transition: transform var(--transition-normal);
+}
+
+.nav-link:hover {
+    background-color: rgba(170, 255, 47, 0.1);
+    transform: translateX(8px);
+    box-shadow: 0 4px 16px rgba(170, 255, 47, 0.2);
+}
+
+.nav-link:hover::before {
+    transform: scaleY(1);
+}
+
+.nav-icon {
+    font-size: 1.25rem;
+}
+
+/* Pop-up effect on hover */
+.nav-tooltip {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    background-color: var(--color-sidebar);
+    color: var(--color-text-body);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-normal);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all var(--transition-fast);
+    border: 1px solid var(--color-cta);
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+.nav-link:hover .nav-tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(20px);
+}
+
+/* ===================================
+   6. MAIN CONTENT AREA
+   =================================== */
+.main-content {
+    margin-left: 240px;
+    flex: 1;
+    padding: var(--spacing-lg);
+    min-height: 100vh;
+}
+
+.header {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+.header-title {
+    font-size: 2.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-body);
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.header-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-body);
+    opacity: 0.9;
+}
+
+/* ===================================
+   7. PRODUCT GRID
+   =================================== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.product-card {
+    background-color: var(--color-card-bg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    background-color: var(--color-card-hover);
+    border-color: var(--color-cta);
+}
+
+.product-image-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.1);
+}
+
+.product-badge {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background-color: var(--color-cta);
+    color: var(--color-sidebar);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+}
+
+.product-info {
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+}
+
+.product-details {
+    flex: 1;
+}
+
+.product-name {
+    font-size: 1rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-body);
+    margin-bottom: var(--spacing-xs);
+}
+
+.product-description {
+    font-size: 0.875rem;
+    color: var(--color-text-body);
+    opacity: 0.8;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-cta);
+    white-space: nowrap;
+}
+
+.product-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    padding: 0 var(--spacing-md) var(--spacing-md);
+}
+
+.btn {
+    flex: 1;
+    padding: var(--spacing-sm);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background-color: var(--color-cta);
+    color: var(--color-sidebar);
+}
+
+.btn-primary:hover {
+    background-color: #95E620;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(170, 255, 47, 0.4);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-text-body);
+    border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-card-hover);
+    border-color: var(--color-cta);
+}
+
+/* ===================================
+   8. SHOPPING CART ICON
+   =================================== */
+.cart-icon-container {
+    position: fixed;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    z-index: 999;
+}
+
+.cart-button {
+    background-color: var(--color-sidebar);
+    border: 2px solid var(--color-cta);
+    color: var(--color-cta);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+    position: relative;
+}
+
+.cart-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(170, 255, 47, 0.4);
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-cta);
+    color: var(--color-sidebar);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+}
+
+/* ===================================
+   9. MODAL STYLES
+   =================================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-overlay);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--color-sidebar);
+    border: 2px solid var(--color-cta);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: modalSlideIn var(--transition-normal);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-cta);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    color: var(--color-cta);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--color-text-body);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    color: var(--color-cta);
+    transform: rotate(90deg);
+}
+
+/* ===================================
+   10. RESPONSIVE DESIGN
+   =================================== */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+        padding: var(--spacing-md) var(--spacing-xs);
+    }
+
+    .brand-name {
+        display: none;
+    }
+
+    .nav-link {
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .nav-link span:not(.nav-icon) {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 80px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: var(--spacing-md);
+    }
+
+    .header-title {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-icon-container {
+        bottom: var(--spacing-lg);
+        top: auto;
+    }
+}
+
+/* ===================================
+   11. UTILITY CLASSES
+   =================================== */
+.text-center {
+    text-align: center;
+}
+
+.mt-lg {
+    margin-top: var(--spacing-lg);
+}
+
+.mb-lg {
+    margin-bottom: var(--spacing-lg);
+}
+
+.hidden {
+    display: none;
+}
+
+/* ===================================
+   12. ANIMATIONS
+   =================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn var(--transition-normal);
+}
+
+/* ===================================
+   13. SCROLLBAR STYLING
+   =================================== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-cta);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #95E620;
+}
