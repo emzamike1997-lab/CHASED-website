@@ -2082,7 +2082,7 @@ p {
         padding: var(--spacing-md) var(--spacing-sm) var(--spacing-xl);
         position: relative;
         margin-top: 40px;
-        min-height: 30vh;
+        min-height: 50vh;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
