@@ -2034,40 +2034,40 @@ p {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        gap: var(--spacing-sm);
+        gap: 8px;
         text-align: left;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
     }
 
     .footer-section {
-        flex: 0 0 auto;
-        min-width: 140px;
-        max-width: 48%;
+        flex: 1;
+        min-width: 80px;
+        max-width: 25%;
     }
 
     .footer-section h4 {
-        font-size: 0.85rem;
-        margin-bottom: 8px;
+        font-size: 0.75rem;
+        margin-bottom: 6px;
         white-space: nowrap;
     }
 
     .footer-section p {
-        font-size: 0.7rem;
-        line-height: 1.3;
-        margin-bottom: 8px;
+        font-size: 0.65rem;
+        line-height: 1.2;
+        margin-bottom: 6px;
     }
 
     .footer-links {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
     }
 
     .footer-links li {
-        margin-bottom: 4px;
+        margin-bottom: 3px;
     }
 
     .footer-section .btn {
-        font-size: 0.7rem;
-        padding: 6px 12px;
+        font-size: 0.65rem;
+        padding: 5px 10px;
     }
 
     .site-footer {
