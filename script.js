@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeProductCategories();
     initializeHeaderInteractions();
     initializeMobileCart();
+
+    // Set home section as default landing page
+    navigateToSection('home');
 });
 
 function initializeMobileCart() {
