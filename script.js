@@ -263,38 +263,165 @@ function removeFromCart(index) {
 // ===================================
 // USER AUTHENTICATION
 // ===================================
-function initializeAuth() {
-    // Check initial session
-    checkSession();
+// ===================================
+// USER AUTHENTICATION
+// ===================================
+// Initialize Supabase Client
+const supabaseUrl = 'https://keznpnwibyphyvjbslox.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtlem5wbndpYnlwaHl2amJzbG94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxODE0MzIsImV4cCI6MjA4Mzc1NzQzMn0.efisBO6y3ySFV9InD2boDIIWpBnFVpKfsMBGH7K9OTM';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Listen for auth changes
-    window.supabaseClient.auth.onAuthStateChange((event, session) => {
+function initializeAuth() {
+    // Listen for auth state changes
+    supabase.auth.onAuthStateChange((event, session) => {
         updateAuthUI(session);
     });
+
+    // Check initial session
+    checkSession();
 }
 
 async function checkSession() {
-    const { data: { session } } = await window.supabaseClient.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession();
     updateAuthUI(session);
 }
 
 function updateAuthUI(session) {
-    const loginContainer = document.querySelector('.profile-container:not(#profile-logged-in)');
-    const loggedInContainer = document.getElementById('profile-logged-in');
-    const userEmailDisplay = document.getElementById('user-email-display');
+    const profileSection = document.getElementById('profile-section');
+    const authForms = document.getElementById('auth-forms'); // Container for login/signup forms
+    const userProfile = document.getElementById('user-profile-view'); // Container for logged-in view
+
+    // We need to modify the HTML structure slightly to separate the forms from the logged-in view
+    // Since we can't easily change HTML structure in JS without potentially breaking listeners, 
+    // we will toggle visibility of existing elements and inject the logged-in view if needed.
+
+    const loginContainer = document.querySelector('.profile-container');
 
     if (session) {
-        if (loginContainer) loginContainer.style.display = 'none';
-        if (loggedInContainer) loggedInContainer.style.display = 'block';
-        if (userEmailDisplay) userEmailDisplay.textContent = session.user.email;
+        // User is logged in
+        renderLoggedInView(session.user, loginContainer);
     } else {
-        if (loginContainer) loginContainer.style.display = 'block';
-        if (loggedInContainer) loggedInContainer.style.display = 'none';
-        if (userEmailDisplay) userEmailDisplay.textContent = '';
+        // User is logged out
+        renderLoggedOutView(loginContainer);
     }
 }
 
-// Superseded by initializeProfileForms logic
+function renderLoggedInView(user, container) {
+    const userEmail = user.email;
+    const userName = user.user_metadata.full_name || 'User';
+
+    container.innerHTML = `
+        <div class="header">
+            <h1 class="header-title">Welcome Back</h1>
+            <p class="header-subtitle">${userName}</p>
+        </div>
+        
+        <div class="user-dashboard" style="text-align: center; margin-top: 2rem;">
+            <div class="user-avatar" style="width: 80px; height: 80px; background: #333; color: #fff; border-radius: 50%; font-size: 2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                ${userName.charAt(0).toUpperCase()}
+            </div>
+            <p style="margin-bottom: 2rem; color: #666;">${userEmail}</p>
+            
+            <div class="dashboard-actions">
+                <button onclick="handleLogout()" class="btn btn-secondary">Sign Out</button>
+            </div>
+        </div>
+    `;
+}
+
+function renderLoggedOutView(container) {
+    // Restore original login forms
+    container.innerHTML = `
+        <div class="header">
+            <h1 class="header-title">Your Account</h1>
+            <p class="header-subtitle">Login or create a new account to get started</p>
+        </div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="login-tab">Login</button>
+            <button class="auth-tab" id="signup-tab">Create Account</button>
+        </div>
+
+        <!-- Login Form -->
+        <div class="auth-form-container" id="login-form-container">
+            <form class="profile-form" id="profile-login-form">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="remember-me">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+        </div>
+
+        <!-- Create Account Form -->
+        <div class="auth-form-container" id="signup-form-container" style="display: none;">
+            <form class="profile-form" id="profile-signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" class="form-input" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-email">Email Address</label>
+                    <input type="email" id="signup-email" class="form-input" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" class="form-input" placeholder="Create a strong password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" class="form-input" placeholder="Re-enter your password" required>
+                </div>
+
+                <label class="checkbox-label">
+                    <input type="checkbox" id="terms-agree" required>
+                    <span>I agree to the Terms of Service and Privacy Policy</span>
+                </label>
+
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+            </form>
+        </div>
+    `;
+
+    // Re-initialize listeners since we replaced DOM
+    initializeProfileForms();
+}
+
+async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+        alert('Error logging out: ' + error.message);
+    }
+}
+
+// Global scope to make it accessible to inline onclick
+window.handleLogout = handleLogout;
+
+function handleLogin() {
+    // Deprecated in favor of event listeners
+}
+
+function handleCreateAccount() {
+    // Deprecated in favor of event listeners
+}
+
 
 // ===================================
 // SELL MENU
@@ -786,7 +913,7 @@ function initializeProfileForms() {
                 btn.textContent = 'Logging in...';
                 btn.disabled = true;
 
-                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                const { data, error } = await supabase.auth.signInWithPassword({
                     email,
                     password
                 });
@@ -824,7 +951,7 @@ function initializeProfileForms() {
                 btn.textContent = 'Creating Account...';
                 btn.disabled = true;
 
-                const { data, error } = await window.supabaseClient.auth.signUp({
+                const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -843,19 +970,6 @@ function initializeProfileForms() {
             } finally {
                 btn.textContent = originalText;
                 btn.disabled = false;
-            }
-        });
-    }
-
-    // Handle logout
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', async () => {
-            try {
-                const { error } = await window.supabaseClient.auth.signOut();
-                if (error) throw error;
-            } catch (error) {
-                alert('Error signing out: ' + error.message);
             }
         });
     }
