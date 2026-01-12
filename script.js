@@ -963,7 +963,11 @@ function initializeProfileForms() {
 
                 if (error) throw error;
 
-                alert('Account created! You are now logged in.');
+                if (data.session) {
+                    alert('Account created! You are now logged in.');
+                } else {
+                    alert('Account created! Please check your email to confirm your account.');
+                }
 
             } catch (error) {
                 alert('Signup failed: ' + error.message);
