@@ -1,6 +1,10 @@
 # CHASED Website
 
+
+**Live Website:** [https://chased-website.vercel.app](https://chased-website.vercel.app)
+
 This is the project repository for the CHASED e-commerce website.
+
 
 ## Project Structure
 - `index.html`: The main simple landing page.

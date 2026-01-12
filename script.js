@@ -264,23 +264,37 @@ function removeFromCart(index) {
 // USER AUTHENTICATION
 // ===================================
 function initializeAuth() {
-    // Profile link now uses navigation system
-    // No need for separate auth modal
+    // Check initial session
+    checkSession();
+
+    // Listen for auth changes
+    window.supabaseClient.auth.onAuthStateChange((event, session) => {
+        updateAuthUI(session);
+    });
 }
 
-function handleLogin() {
-    const email = document.getElementById('auth-email').value;
-    const password = document.getElementById('auth-password').value;
+async function checkSession() {
+    const { data: { session } } = await window.supabaseClient.auth.getSession();
+    updateAuthUI(session);
+}
 
-    if (email && password) {
-        alert('Login successful!');
-        document.getElementById('auth-modal').classList.remove('active');
+function updateAuthUI(session) {
+    const loginContainer = document.querySelector('.profile-container:not(#profile-logged-in)');
+    const loggedInContainer = document.getElementById('profile-logged-in');
+    const userEmailDisplay = document.getElementById('user-email-display');
+
+    if (session) {
+        if (loginContainer) loginContainer.style.display = 'none';
+        if (loggedInContainer) loggedInContainer.style.display = 'block';
+        if (userEmailDisplay) userEmailDisplay.textContent = session.user.email;
+    } else {
+        if (loginContainer) loginContainer.style.display = 'block';
+        if (loggedInContainer) loggedInContainer.style.display = 'none';
+        if (userEmailDisplay) userEmailDisplay.textContent = '';
     }
 }
 
-function handleCreateAccount() {
-    alert('Create Account feature coming soon!');
-}
+// Superseded by initializeProfileForms logic
 
 // ===================================
 // SELL MENU
@@ -761,28 +775,88 @@ function initializeProfileForms() {
     // Handle login form submission
     const loginFormElement = document.getElementById('profile-login-form');
     if (loginFormElement) {
-        loginFormElement.addEventListener('submit', (e) => {
+        loginFormElement.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
-            alert(`Login successful for ${email}!`);
+            const password = document.getElementById('login-password').value;
+            const btn = loginFormElement.querySelector('button');
+            const originalText = btn.textContent;
+
+            try {
+                btn.textContent = 'Logging in...';
+                btn.disabled = true;
+
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) throw error;
+
+                // Login successful - UI updates via onAuthStateChange
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
         });
     }
 
     // Handle signup form submission
     const signupFormElement = document.getElementById('profile-signup-form');
     if (signupFormElement) {
-        signupFormElement.addEventListener('submit', (e) => {
+        signupFormElement.addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             const confirm = document.getElementById('signup-confirm').value;
+            const btn = signupFormElement.querySelector('button');
+            const originalText = btn.textContent;
 
             if (password !== confirm) {
                 alert('Passwords do not match!');
                 return;
             }
 
-            alert(`Account created successfully for ${name}!`);
+            try {
+                btn.textContent = 'Creating Account...';
+                btn.disabled = true;
+
+                const { data, error } = await window.supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: name
+                        }
+                    }
+                });
+
+                if (error) throw error;
+
+                alert('Account created! You are now logged in.');
+
+            } catch (error) {
+                alert('Signup failed: ' + error.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
+    }
+
+    // Handle logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                const { error } = await window.supabaseClient.auth.signOut();
+                if (error) throw error;
+            } catch (error) {
+                alert('Error signing out: ' + error.message);
+            }
         });
     }
 }
